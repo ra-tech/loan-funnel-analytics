@@ -1,58 +1,69 @@
 # Loan Application Funnel Analytics
 
-A MySQL-based product analytics project exploring customer behaviour across a simulated digital lending journey.
+A MySQL-based product analytics project that models and analyses a simulated digital lending journey.
 
-The project models users, loan applications, and application events to analyse how customers move through a loan application funnel and where they drop off.
+The project uses a relational database containing users, loan applications and application events to study customer conversion, funnel drop-offs and acquisition-channel performance.
 
 ## Project Objective
 
-The goal of this project is to use SQL to answer product and business questions such as:
+The goal of this project is to use SQL and product analytics concepts to answer business questions such as:
 
-- What percentage of applications are successfully disbursed?
+- What percentage of loan applications are successfully disbursed?
 - At which stage do customers drop out most frequently?
 - Which acquisition channels generate the highest conversion rates?
-- How does loan performance vary across cities and customer segments?
+- How do application outcomes vary across customer segments and cities?
+- Does requested loan amount affect approval probability?
 - How long does a customer typically take to move from application to disbursement?
 
-## Database Structure
+## Database Design
 
-The database currently contains three relational tables:
+The project uses three relational tables.
 
 ### `users`
-Stores customer-level information including:
-- signup date
-- city
-- age
-- acquisition channel
+
+Stores customer-level information:
+
+- `user_id`
+- `signup_date`
+- `city`
+- `age`
+- `acquisition_channel`
 
 ### `loan_applications`
-Stores loan application information including:
-- customer
-- application date
-- requested loan amount
-- tenure
-- application status
+
+Stores loan application information:
+
+- `application_id`
+- `user_id`
+- `application_date`
+- `loan_amount`
+- `tenure_months`
+- `status`
+
+Each application is linked to a user through a foreign key.
 
 ### `application_events`
-Stores events representing the customer's journey through the application funnel.
 
-Example events include:
+Stores the customer's progress through the loan application funnel:
 
-Application Started → Details Completed → KYC Completed → Offer Viewed → Offer Accepted → Loan Disbursed
+- `event_id`
+- `application_id`
+- `event_name`
+- `event_time`
 
-## Tech Stack
+Each event is linked to a loan application through a foreign key.
 
-- MySQL
-- SQL
-- Python *(for synthetic data generation)*
-
-## Repository Structure
+A typical customer journey may look like:
 
 ```text
-loan-funnel-analytics/
-│
-├── README.md
-├── sql/
-│   └── schema.sql
-├── data/
-└── scripts/
+Application Started
+        ↓
+Details Completed
+        ↓
+KYC Completed
+        ↓
+Offer Viewed
+        ↓
+Offer Accepted
+        ↓
+Loan Disbursed
